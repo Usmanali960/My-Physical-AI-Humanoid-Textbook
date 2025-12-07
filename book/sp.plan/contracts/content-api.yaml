@@ -1,0 +1,276 @@
+# API Contract: Content Management Interface for Physical AI & Humanoid Robotics Textbook
+
+**Version**: 1.0.0
+**Created**: 2025-12-07
+**Feature**: Physical AI & Humanoid Robotics Textbook
+**Plan**: book/sp.plan/plan.md
+
+## Overview
+
+This contract defines the interfaces for managing educational content within the Physical AI & Humanoid Robotics textbook system. These interfaces would be used if the system had dynamic content management capabilities, though the current implementation is static using Docusaurus.
+
+## Content Management API
+
+### Module Management
+
+#### `GET /api/v1/modules`
+**Description**: Retrieve all textbook modules or a specific module if an ID is provided
+
+**Parameters**:
+- `moduleId` (optional, query): Specific module ID to retrieve
+- `status` (optional, query): Filter by development status (draft, in-progress, review, approved, published, deprecated)
+- `limit` (optional, query): Number of results to return (default: 20, max: 100)
+- `offset` (optional, query): Number of results to skip (default: 0)
+
+**Response** (200 OK):
+```
+{
+  "data": [
+    {
+      "moduleId": "module-01-ros2",
+      "title": "ROS 2: The Robotic Nervous System",
+      "description": "Introduction to ROS 2 fundamentals and architecture",
+      "duration": 3,
+      "learningObjectives": [
+        "Understand ROS 2 architecture and core concepts",
+        "Implement basic publisher/subscriber patterns",
+        "Use rclpy for Python ROS 2 development"
+      ],
+      "prerequisites": [
+        "Basic Python programming",
+        "Linux command line familiarity"
+      ],
+      "chapters": [
+        "module-01-chapter-01",
+        "module-01-chapter-02", 
+        "module-01-chapter-03",
+        "module-01-chapter-04"
+      ],
+      "sidebarPosition": 1,
+      "status": "published",
+      "createdAt": "2025-11-01T00:00:00Z",
+      "updatedAt": "2025-12-07T00:00:00Z"
+    }
+  ],
+  "pagination": {
+    "limit": 20,
+    "offset": 0,
+    "total": 8
+  }
+}
+```
+
+**Errors**:
+- 400: Invalid parameters
+- 404: Module not found (if moduleId specified)
+
+#### `GET /api/v1/modules/{moduleId}/chapters`
+**Description**: Retrieve all chapters within a specific module
+
+**Path Parameters**:
+- `moduleId`: The ID of the module (e.g., "module-01-ros2")
+
+**Response** (200 OK):
+```
+{
+  "data": [
+    {
+      "chapterId": "module-01-chapter-01",
+      "title": "Introduction to ROS 2",
+      "description": "Understanding the fundamentals of the Robot Operating System",
+      "estimatedTime": "2 hours",
+      "position": 1,
+      "status": "published"
+    }
+  ]
+}
+```
+
+**Errors**:
+- 404: Module not found
+
+### Content Retrieval
+
+#### `GET /api/v1/chapters/{chapterId}`
+**Description**: Retrieve detailed content of a specific chapter
+
+**Path Parameters**:
+- `chapterId`: The ID of the chapter (e.g., "module-01-chapter-01")
+
+**Response** (200 OK):
+```
+{
+  "data": {
+    "chapterId": "module-01-chapter-01",
+    "title": "Introduction to ROS 2",
+    "moduleId": "module-01-ros2",
+    "content": [
+      {
+        "blockId": "content-block-001",
+        "type": "text",
+        "content": "# Introduction to ROS 2\n\nROS 2 (Robot Operating System 2) is ...",
+        "headingLevel": 1
+      },
+      {
+        "blockId": "content-block-002",
+        "type": "code",
+        "content": "import rclpy\nfrom rclpy.node import Node\n\nclass MinimalPublisher(Node):\n    def __init__(self):\n        super().__init__('minimal_publisher')",
+        "language": "python",
+        "title": "Basic Publisher Node"
+      }
+    ],
+    "estimatedTime": "2 hours",
+    "status": "published",
+    "createdAt": "2025-11-01T00:00:00Z",
+    "updatedAt": "2025-12-07T00:00:00Z"
+  }
+}
+```
+
+**Errors**:
+- 404: Chapter not found
+
+### Learning Objectives
+
+#### `GET /api/v1/modules/{moduleId}/objectives`
+**Description**: Retrieve learning objectives for a specific module
+
+**Path Parameters**:
+- `moduleId`: The ID of the module (e.g., "module-01-ros2")
+
+**Response** (200 OK):
+```
+{
+  "data": [
+    {
+      "objectiveId": "obj-001",
+      "description": "Understand ROS 2 architecture and core concepts",
+      "difficultyLevel": "beginner",
+      "assessmentCriteria": "Student can explain DDS, nodes, topics, and services"
+    }
+  ]
+}
+```
+
+**Errors**:
+- 404: Module not found
+
+## User Interaction APIs
+
+### Personalization API
+
+#### `POST /api/v1/personalize`
+**Description**: Customize content based on user profile
+
+**Request Body**:
+```
+{
+  "userId": "user-123",
+  "background": "beginner",
+  "interests": ["vision", "humanoid"],
+  "targetModuleId": "module-01-ros2"
+}
+```
+
+**Response** (200 OK):
+```
+{
+  "customizedContent": {
+    "moduleId": "module-01-ros2",
+    "focusAreas": ["computer vision applications", "humanoid-specific examples"],
+    "recommendedPath": [
+      {"chapterId": "module-01-chapter-01", "title": "Introduction with vision examples", "duration": "2.5 hours"},
+      {"chapterId": "module-01-chapter-04", "title": "URDF for humanoid robots", "duration": "3 hours"}
+    ]
+  }
+}
+```
+
+### Translation API
+
+#### `POST /api/v1/translate`
+**Description**: Translate content to a target language
+
+**Request Body**:
+```
+{
+  "contentId": "content-block-001",
+  "targetLanguage": "ur",
+  "type": "chapter" // or "module", "content-block"
+}
+```
+
+**Response** (200 OK):
+```
+{
+  "translatedContent": {
+    "originalLanguage": "en",
+    "targetLanguage": "ur",
+    "content": "# ROS 2 کا تعارف\n\nROS 2 (روبوٹ آپریٹنگ سسٹم 2) ایک ہے ...",
+    "lastTranslatedAt": "2025-12-07T00:00:00Z"
+  }
+}
+```
+
+## Assessment APIs
+
+### Quiz Retrieval
+
+#### `GET /api/v1/assessments/{assessmentId}`
+**Description**: Retrieve an assessment with its questions
+
+**Path Parameters**:
+- `assessmentId`: The ID of the assessment
+
+**Response** (200 OK):
+```
+{
+  "data": {
+    "assessmentId": "assessment-001",
+    "title": "ROS 2 Basics Quiz",
+    "type": "quiz",
+    "moduleId": "module-01-ros2",
+    "difficultyLevel": "beginner",
+    "questions": [
+      {
+        "questionId": "q-001",
+        "text": "What does DDS stand for in ROS 2?",
+        "type": "multiple-choice",
+        "options": ["Data Distribution System", "Data Distribution Service", "Distributed Data System", "Direct Data Stream"],
+        "correctAnswer": "Data Distribution Service",
+        "explanation": "DDS stands for Data Distribution Service, which is the underlying communication middleware in ROS 2."
+      }
+    ]
+  }
+}
+```
+
+## Authentication and Authorization
+
+For APIs that modify content (not covered in basic retrieval):
+- Use JWT tokens for authentication
+- Role-based access control (Admin, Author, Contributor)
+- Rate limiting: 100 requests per minute per IP
+
+## Error Response Format
+
+All error responses follow this format:
+```
+{
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human-readable error message",
+    "details": "Additional error details if applicable"
+  }
+}
+```
+
+## Versioning
+
+- API version is included in the URL path (e.g., `/api/v1/`)
+- Backward compatibility maintained for minor versions
+- Breaking changes result in new major version
+
+## OpenAPI Specification
+
+For more detailed API documentation in OpenAPI 3.0 format, see `openapi.yaml` in this directory.

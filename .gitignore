@@ -1,0 +1,69 @@
+# Dependencies
+node_modules/
+jspm_packages/
+
+# Docusaurus
+.build/
+.dist/
+.docusaurus/
+.temp/
+
+# Production builds
+build/
+out/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+*.lcov
+
+# Temporary files
+*.tmp
+*.bak
+*.orig
+*.rej
+
+# Compiled files
+*.o
+*.pyc
+__pycache__/
+*.class
+*.so
+
+# Package manager
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Secrets
+secrets/
+*.key
+*.pem
+*.crt
+*.cert
+
+# Python
+*.pyc
+__pycache__/
+.pytest_cache/
+.coverage

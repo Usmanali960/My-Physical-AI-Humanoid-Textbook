@@ -1,0 +1,8 @@
+{
+  "label": "Physical AI & Humanoid Robotics",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "An AI-Native Technical Textbook covering all aspects of humanoid robotics development."
+  }
+}
