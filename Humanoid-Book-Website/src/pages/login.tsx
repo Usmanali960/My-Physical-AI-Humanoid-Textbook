@@ -1,19 +1,22 @@
 // src/pages/login.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import Layout from '@theme/Layout';
-import { useAuth } from '../contexts/AuthContext';
-import { useAuthOperations } from '../hooks/useAuthOperations';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 
-const LoginPage = () => {
+function LoginPageContent() {
+  const { useState } = React;
+  const { useAuth } = require('../contexts/AuthContext');
+  const { useAuthOperations } = require('../hooks/useAuthOperations');
+
   const { login } = useAuth();
-  const { loading, error, login: loginUser, resetError } = useAuthOperations();
+  const { loading, error, login: loginUser, register, resetError } = useAuthOperations();
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [showRegister, setShowRegister] = useState(false);
-  const [registerForm, setRegisterForm] = useState({ 
-    email: '', 
-    password: '', 
-    firstName: '', 
-    lastName: '' 
+  const [registerForm, setRegisterForm] = useState({
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: ''
   });
 
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,12 +52,17 @@ const LoginPage = () => {
         first_name: registerForm.firstName,
         last_name: registerForm.lastName
       };
-      // Registration will happen in the backend, then user will be logged in
-      await loginUser({ email: registerForm.email, password: registerForm.password });
-      // If we reach here, login was successful after registration
+
+      // Register the user
+      const result = await register(userData);
+
+      // On successful registration, update the auth context with user data
+      login(result.user || { email: registerForm.email, first_name: registerForm.firstName, last_name: registerForm.lastName });
+
+      // Redirect to profile or previous page
       window.location.href = '/profile';
     } catch (err) {
-      console.error('Registration/Login failed:', err);
+      console.error('Registration failed:', err);
     }
   };
 
@@ -67,7 +75,7 @@ const LoginPage = () => {
               <div className="card__header">
                 <h2>{showRegister ? 'Create Account' : 'Login to Your Account'}</h2>
               </div>
-              
+
               <div className="card__body">
                 {error && (
                   <div className="alert alert--danger" role="alert">
@@ -89,7 +97,7 @@ const LoginPage = () => {
                         required
                       />
                     </div>
-                    
+
                     <div className="margin-bottom--md">
                       <label htmlFor="lastName" className="form-label">Last Name</label>
                       <input
@@ -102,7 +110,7 @@ const LoginPage = () => {
                         required
                       />
                     </div>
-                    
+
                     <div className="margin-bottom--md">
                       <label htmlFor="regEmail" className="form-label">Email</label>
                       <input
@@ -115,7 +123,7 @@ const LoginPage = () => {
                         required
                       />
                     </div>
-                    
+
                     <div className="margin-bottom--md">
                       <label htmlFor="regPassword" className="form-label">Password</label>
                       <input
@@ -129,9 +137,9 @@ const LoginPage = () => {
                         minLength={8}
                       />
                     </div>
-                    
-                    <button 
-                      type="submit" 
+
+                    <button
+                      type="submit"
                       className="button button--primary button--block"
                       disabled={loading}
                     >
@@ -152,7 +160,7 @@ const LoginPage = () => {
                         required
                       />
                     </div>
-                    
+
                     <div className="margin-bottom--md">
                       <label htmlFor="password" className="form-label">Password</label>
                       <input
@@ -165,9 +173,9 @@ const LoginPage = () => {
                         required
                       />
                     </div>
-                    
-                    <button 
-                      type="submit" 
+
+                    <button
+                      type="submit"
                       className="button button--primary button--block"
                       disabled={loading}
                     >
@@ -175,9 +183,9 @@ const LoginPage = () => {
                     </button>
                   </form>
                 )}
-                
+
                 <div className="margin-top--md">
-                  <button 
+                  <button
                     className="button button--outline button--block"
                     onClick={() => setShowRegister(!showRegister)}
                   >
@@ -186,12 +194,12 @@ const LoginPage = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="margin-top--lg text--center">
               <h3>Or sign in with</h3>
               <div className="button-group button-group--block margin-top--sm">
                 {/* Google OAuth Button */}
-                <button 
+                <button
                   className="button button--secondary"
                   onClick={() => {
                     // In a real implementation, this would trigger Google OAuth flow
@@ -200,9 +208,9 @@ const LoginPage = () => {
                 >
                   Sign in with Google
                 </button>
-                
+
                 {/* GitHub OAuth Button */}
-                <button 
+                <button
                   className="button button--secondary"
                   onClick={() => {
                     // In a real implementation, this would trigger GitHub OAuth flow
@@ -218,6 +226,14 @@ const LoginPage = () => {
       </div>
     </Layout>
   );
-};
+}
+
+function LoginPage() {
+  return (
+    <BrowserOnly>
+      {() => <LoginPageContent />}
+    </BrowserOnly>
+  );
+}
 
 export default LoginPage;

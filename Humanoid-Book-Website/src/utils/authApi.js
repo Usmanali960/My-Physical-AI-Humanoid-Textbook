@@ -4,7 +4,7 @@ import { API_CONFIG } from '../config/api';
 
 /**
  * Register a new user
- * @param {Object} userData - User registration data { email, password, first_name, last_name }
+ * @param {Object} userData - User registration data { email, password, first_name, last_name, software_experience, software_domains, hardware_experience, hardware_domains, primary_programming_language, years_experience, educational_background, primary_goal }
  * @returns {Promise<Object>} Registration response
  */
 export const registerUser = async (userData) => {
@@ -21,6 +21,11 @@ export const registerUser = async (userData) => {
 
     if (!response.ok) {
       throw new Error(result.detail || 'Registration failed');
+    }
+
+    // Store token in localStorage if provided in response (some backends return tokens on registration)
+    if (result.access_token) {
+      localStorage.setItem('auth_token', result.access_token);
     }
 
     return result;
@@ -115,19 +120,31 @@ export const getUserProfile = async () => {
       },
     });
 
-    const result = await response.json();
-
     if (!response.ok) {
       if (response.status === 401) {
         localStorage.removeItem('auth_token');
         throw new Error('Authentication expired');
       }
+      const result = await response.json();
       throw new Error(result.detail || 'Failed to fetch profile');
     }
 
+    const result = await response.json();
     return result.user;
   } catch (error) {
     console.error('Get profile error:', error);
+    // If there's a network error, clear the token to prevent repeated failed requests
+    if (error.message.includes('Failed to fetch') ||
+        error.message.includes('NetworkError') ||
+        error.message.includes('token validation timeout') ||
+        error.message.includes('profile fetch timeout')) {
+      try {
+        localStorage.removeItem('auth_token');
+      } catch (storageError) {
+        console.error('Error removing auth token:', storageError);
+      }
+      throw new Error('Unable to connect to authentication service');
+    }
     throw error;
   }
 };
@@ -218,6 +235,13 @@ export const verifyToken = async () => {
     return response.ok;
   } catch (error) {
     console.error('Token verification error:', error);
+    // Return false if there's a network error, but also clear the token
+    // to prevent repeated failed requests
+    try {
+      localStorage.removeItem('auth_token');
+    } catch (storageError) {
+      console.error('Error removing auth token:', storageError);
+    }
     return false;
   }
 };

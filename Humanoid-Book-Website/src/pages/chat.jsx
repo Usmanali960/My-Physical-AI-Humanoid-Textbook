@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from '@theme/Layout';
 import ChatBotEmbed from '../components/ChatBotEmbed/ChatBotEmbed';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 
 function ChatPage() {
   return (
@@ -16,7 +17,15 @@ function ChatPage() {
               Ask questions about mechanics, AI implementations, sensors, actuators, locomotion, and more!
             </p>
 
-            <ChatBotEmbed chainlitUrl={`${window.location.protocol}//${window.location.hostname}:${window.env?.CHAINLIT_PORT || 8000}`} />
+            <BrowserOnly>
+              {() => {
+                const chainlitPort = typeof window !== 'undefined'
+                  ? (window.env?.CHAINLIT_PORT || 8000)
+                  : 8000;
+                const chainlitUrl = `${window.location.protocol}//${window.location.hostname}:${chainlitPort}`;
+                return <ChatBotEmbed chainlitUrl={chainlitUrl} />;
+              }}
+            </BrowserOnly>
           </div>
         </div>
       </div>

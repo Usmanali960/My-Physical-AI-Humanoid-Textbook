@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Layout from '@theme/Layout';
-import { useAuth } from '../contexts/AuthContext';
-import { useAuthOperations } from '../hooks/useAuthOperations';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 
-const ProfilePage = () => {
+function ProfilePageContent() {
+  const { useState, useEffect } = React;
+  const { useAuth } = require('../contexts/AuthContext');
+  const { useAuthOperations } = require('../hooks/useAuthOperations');
+
   const { user, isAuthenticated, logout } = useAuth();
   const { loading: authLoading, fetchUserProfile, updateProfile } = useAuthOperations();
   const [profileData, setProfileData] = useState<any>(null);
@@ -439,6 +442,14 @@ const ProfilePage = () => {
       </div>
     </Layout>
   );
-};
+}
+
+function ProfilePage() {
+  return (
+    <BrowserOnly>
+      {() => <ProfilePageContent />}
+    </BrowserOnly>
+  );
+}
 
 export default ProfilePage;

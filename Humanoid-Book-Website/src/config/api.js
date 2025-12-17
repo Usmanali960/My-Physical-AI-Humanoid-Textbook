@@ -1,10 +1,23 @@
 // src/config/api.js
 // Configuration for the backend API
 
+// Safely access environment variables in both Node.js and browser environments
+const getBackendUrl = () => {
+  // Check if we're in a browser environment where process is not defined
+  if (typeof process === 'undefined' || !process.env) {
+    // Fallback to a default URL when process is not available (browser environment)
+    // This can be overridden by defining window.APP_CONFIG in index.html if needed
+    return window.APP_CONFIG?.API_BASE_URL || 'http://127.0.0.1:8001';
+  }
+  // In Node.js environment, use process.env as usual
+  return process.env.REACT_APP_API_URL ||
+         process.env.REACT_APP_API_BASE_URL ||
+         process.env.NEXT_PUBLIC_API_BASE_URL ||
+         'http://127.0.0.1:8001';
+};
+
 // Base URL for the backend API
-const BACKEND_API_URL = process.env.REACT_APP_API_BASE_URL ||
-                       process.env.NEXT_PUBLIC_API_BASE_URL ||
-                       'http://localhost:8000';
+const BACKEND_API_URL = getBackendUrl();
 
 // Export configuration object
 export const API_CONFIG = {
