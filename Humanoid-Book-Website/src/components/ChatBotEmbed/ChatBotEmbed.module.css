@@ -1,0 +1,102 @@
+.chatContainer {
+  width: 100%;
+  max-width: 100%;
+  height: 80vh;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  margin-top: 2rem;
+}
+
+.chatHeader {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+.chatHeader h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: #2c3e50;
+}
+
+.chatHeader p {
+  margin: 0;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.iframeContainer {
+  flex: 1;
+  position: relative;
+}
+
+.chatIframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e0e0e0;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+  color: #e74c3c;
+  flex: 1;
+}
+
+.errorContainer p {
+  margin: 0 0 1rem 0;
+}
+
+.errorContainer .hint {
+  background-color: #fef9e7;
+  border: 1px solid #f9e79f;
+  border-radius: 4px;
+  padding: 0.75rem;
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: #922b21;
+}
+
+@media (max-width: 768px) {
+  .chatContainer {
+    height: 70vh;
+  }
+}

@@ -1,0 +1,527 @@
+# API Contracts: Consolidated RAG Chatbot for AI Textbook
+
+## Basic Endpoints (from initial implementation)
+
+### POST /ingest-book
+**Description**: Ingest all content from the textbook website and create vector embeddings
+
+**Request Body**:
+```json
+{
+  "base_url": "https://myphysicalaihumanoidtextbook.vercel.app/"
+}
+```
+
+**Response**:
+```json
+{
+  "status": "success",
+  "message": "Book ingestion completed",
+  "chunks_processed": 120
+}
+```
+
+### POST /embed
+**Description**: Create embeddings for a specific text chunk
+
+**Request Body**:
+```json
+{
+  "text": "Text content to embed",
+  "source_url": "https://example.com/page",
+  "metadata": {}
+}
+```
+
+**Response**:
+```json
+{
+  "chunk_id": "unique_chunk_id",
+  "embedding_dimension": 1536
+}
+```
+
+### POST /query
+**Description**: Query the knowledge base using semantic search
+
+**Request Body**:
+```json
+{
+  "query": "User's question",
+  "source_filter": "Optional URL to limit search to specific page"
+}
+```
+
+**Response**:
+```json
+{
+  "query_id": "unique_query_id",
+  "response": "Generated answer",
+  "sources": [
+    {
+      "url": "https://example.com/source",
+      "text": "Relevant text snippet"
+    }
+  ]
+}
+```
+
+### POST /chat
+**Description**: Engage in a conversation with the chatbot
+
+**Request Body**:
+```json
+{
+  "message": "User's message",
+  "session_id": "Optional session ID to continue conversation",
+  "selected_text": "Optional text that user has selected on the page"
+}
+```
+
+**Response**:
+```json
+{
+  "response": "Chatbot's response",
+  "session_id": "Conversation session ID",
+  "sources": [
+    {
+      "url": "https://example.com/source",
+      "text": "Relevant text snippet"
+    }
+  ]
+}
+```
+
+### GET /health
+**Description**: Check the health status of the API
+
+**Response**:
+```json
+{
+  "status": "healthy",
+  "timestamp": "2025-01-08T10:00:00Z"
+}
+```
+
+## Advanced Endpoints (from enhanced implementation)
+
+### POST /query-v2
+**Description**: Submit a query and receive a response with structured citations, supporting multi-section retrieval
+
+**Request Schema**
+
+```json
+{
+  "query": {
+    "type": "string",
+    "description": "The user's question or query",
+    "minLength": 1,
+    "maxLength": 1000
+  },
+  "user_context": {
+    "type": "object",
+    "properties": {
+      "user_id": {
+        "type": "string",
+        "description": "Optional user identifier for logged-in users"
+      },
+      "selected_text": {
+        "type": "string",
+        "description": "Optional text selected by the user that should be prioritized in the response",
+        "maxLength": 5000
+      },
+      "session_id": {
+        "type": "string",
+        "description": "Optional session identifier to maintain context"
+      }
+    },
+    "additionalProperties": false
+  }
+}
+```
+
+**Response Schema**
+
+```json
+{
+  "response": {
+    "type": "string",
+    "description": "The AI-generated response to the query"
+  },
+  "citations": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "section": {
+          "type": "string",
+          "description": "The section where the cited information appears"
+        },
+        "page": {
+          "type": "string",
+          "description": "The page where the cited information appears"
+        },
+        "paragraph": {
+          "type": "string",
+          "description": "The paragraph identifier where the cited information appears"
+        },
+        "text_excerpt": {
+          "type": "string",
+          "description": "The excerpt of text that is being cited"
+        },
+        "relevance_score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "The relevance score of this citation to the query"
+        }
+      },
+      "required": ["section", "page", "paragraph", "text_excerpt"],
+      "additionalProperties": false
+    }
+  },
+  "retrieved_sections": {
+    "type": "array",
+    "items": {
+      "type": "string",
+      "description": "List of sections that contributed to the response"
+    }
+  },
+  "session_id": {
+    "type": "string",
+    "description": "The session identifier for maintaining conversation context"
+  },
+  "query_id": {
+    "type": "string",
+    "description": "Unique identifier for this query"
+  }
+}
+```
+
+### POST /chat-v2
+**Description**: Submit a chat message in a session context with persistent storage
+
+**Request Schema**
+
+```json
+{
+  "message": {
+    "type": "string",
+    "description": "The user's message in the conversation",
+    "minLength": 1,
+    "maxLength": 1000
+  },
+  "session_id": {
+    "type": "string",
+    "description": "Session identifier to maintain conversation context",
+    "pattern": "^[a-zA-Z0-9-_]+$"
+  },
+  "user_context": {
+    "type": "object",
+    "properties": {
+      "user_id": {
+        "type": "string",
+        "description": "Optional user identifier for logged-in users"
+      },
+      "selected_text": {
+        "type": "string",
+        "description": "Optional text selected by the user that should be prioritized in the response",
+        "maxLength": 5000
+      }
+    },
+    "additionalProperties": false
+  }
+}
+```
+
+**Response Schema**
+
+```json
+{
+  "response": {
+    "type": "string",
+    "description": "The AI-generated response to the message"
+  },
+  "citations": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "section": {
+          "type": "string",
+          "description": "The section where the cited information appears"
+        },
+        "page": {
+          "type": "string",
+          "description": "The page where the cited information appears"
+        },
+        "paragraph": {
+          "type": "string",
+          "description": "The paragraph identifier where the cited information appears"
+        },
+        "text_excerpt": {
+          "type": "string",
+          "description": "The excerpt of text that is being cited"
+        },
+        "relevance_score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "The relevance score of this citation to the message"
+        }
+      },
+      "required": ["section", "page", "paragraph", "text_excerpt"],
+      "additionalProperties": false
+    }
+  },
+  "session_id": {
+    "type": "string",
+    "description": "The session identifier for maintaining conversation context"
+  },
+  "message_id": {
+    "type": "string",
+    "description": "Unique identifier for this message in the conversation"
+  },
+  "timestamp": {
+    "type": "string",
+    "format": "date-time",
+    "description": "When the message was processed"
+  }
+}
+```
+
+### POST /rerank
+**Description**: Rerank retrieved chunks based on relevance to the user's query
+
+**Request Schema**
+
+```json
+{
+  "query": {
+    "type": "string",
+    "description": "The original user query",
+    "minLength": 1,
+    "maxLength": 1000
+  },
+  "retrieved_chunks": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the chunk"
+        },
+        "content": {
+          "type": "string",
+          "description": "The text content of the chunk",
+          "maxLength": 5000
+        },
+        "source_section": {
+          "type": "string",
+          "description": "The section where this content originates"
+        },
+        "source_page": {
+          "type": "string",
+          "description": "The page where this content originates"
+        },
+        "source_paragraph": {
+          "type": "string",
+          "description": "The paragraph identifier where this content originates"
+        },
+        "initial_score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "The initial relevance score from the vector retrieval"
+        }
+      },
+      "required": ["id", "content", "source_section", "initial_score"],
+      "additionalProperties": false
+    },
+    "minItems": 1,
+    "maxItems": 20
+  },
+  "user_context": {
+    "type": "object",
+    "properties": {
+      "selected_text": {
+        "type": "string",
+        "description": "Optional text selected by the user that should be prioritized",
+        "maxLength": 5000
+      }
+    },
+    "additionalProperties": false
+  }
+}
+```
+
+**Response Schema**
+
+```json
+{
+  "reranked_chunks": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the chunk"
+        },
+        "content": {
+          "type": "string",
+          "description": "The text content of the chunk"
+        },
+        "source_section": {
+          "type": "string",
+          "description": "The section where this content originates"
+        },
+        "source_page": {
+          "type": "string",
+          "description": "The page where this content originates"
+        },
+        "source_paragraph": {
+          "type": "string",
+          "description": "The paragraph identifier where this content originates"
+        },
+        "initial_score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "The initial relevance score from the vector retrieval"
+        },
+        "reranked_score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "The updated relevance score after reranking"
+        }
+      },
+      "required": ["id", "content", "source_section", "initial_score", "reranked_score"],
+      "additionalProperties": false
+    }
+  },
+  "processing_time": {
+    "type": "number",
+    "description": "Time taken to process the reranking in milliseconds"
+  }
+}
+```
+
+### GET /history/{session_id}
+**Description**: Retrieve chat history for a specific session
+
+**Path Parameters**
+
+```json
+{
+  "session_id": {
+    "type": "string",
+    "description": "The unique identifier for the chat session",
+    "pattern": "^[a-zA-Z0-9-_]+$",
+    "minLength": 1,
+    "maxLength": 100
+  }
+}
+```
+
+**Query Parameters**
+
+```json
+{
+  "limit": {
+    "type": "integer",
+    "description": "Maximum number of messages to return (default: 50, max: 100)",
+    "minimum": 1,
+    "maximum": 100,
+    "default": 50
+  },
+  "offset": {
+    "type": "integer",
+    "description": "Number of messages to skip from the beginning (for pagination)",
+    "minimum": 0,
+    "default": 0
+  }
+}
+```
+
+**Response Schema**
+
+```json
+{
+  "session_id": {
+    "type": "string",
+    "description": "The unique identifier for the chat session"
+  },
+  "messages": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this message"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["user", "assistant"],
+          "description": "Whether this message was from the user or the assistant"
+        },
+        "content": {
+          "type": "string",
+          "description": "The text content of the message"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the message was created"
+        },
+        "citations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "section": {
+                "type": "string",
+                "description": "The section where the cited information appears"
+              },
+              "page": {
+                "type": "string",
+                "description": "The page where the cited information appears"
+              },
+              "paragraph": {
+                "type": "string",
+                "description": "The paragraph identifier where the cited information appears"
+              },
+              "text_excerpt": {
+                "type": "string",
+                "description": "The excerpt of text that is being cited"
+              },
+              "relevance_score": {
+                "type": "number",
+                "minimum": 0.0,
+                "maximum": 1.0,
+                "description": "The relevance score of this citation"
+              }
+            },
+            "required": ["section", "page", "paragraph", "text_excerpt"],
+            "additionalProperties": false
+          },
+          "description": "List of citations for assistant messages"
+        }
+      },
+      "required": ["id", "role", "content", "timestamp"],
+      "additionalProperties": false
+    }
+  },
+  "total_messages": {
+    "type": "integer",
+    "description": "Total number of messages in the session"
+  },
+  "has_more": {
+    "type": "boolean",
+    "description": "Whether there are more messages available beyond the current limit"
+  }
+}
+```

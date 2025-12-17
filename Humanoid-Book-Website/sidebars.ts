@@ -16,6 +16,7 @@ const sidebars: SidebarsConfig = {
   // By default, Docusaurus generates a sidebar from the docs folder structure
   tutorialSidebar: [
     'intro',
+    'ai-assistant',
     {
       type: 'category',
       label: 'Physical AI & Humanoid Robotics',
@@ -92,6 +93,71 @@ const sidebars: SidebarsConfig = {
             'physical-ai/module-06-chapter-02',
             'physical-ai/module-06-chapter-03',
             'physical-ai/module-06-chapter-04'
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Module 07 - Programming and Control Systems',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'physical-ai/module-07-chapter-01',
+            'physical-ai/module-07-chapter-02',
+            'physical-ai/module-07-chapter-03',
+            'physical-ai/module-07-chapter-04'
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Module 08 - Applications and Future Developments',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'physical-ai/module-08-chapter-01',
+            'physical-ai/module-08-chapter-02',
+            'physical-ai/module-08-chapter-03',
+            'physical-ai/module-08-chapter-04'
+          ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Project Documentation',
+      collapsible: true,
+      collapsed: true,
+      items: [
+        'constitution',
+        'plan',
+        'quickstart',
+        'research',
+        'tasks',
+        {
+          type: 'category',
+          label: 'Specification',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'specs/checklist',
+            'specs/module-01-ros2',
+            'specs/module-02-gazebo-unity',
+            'specs/module-03-nvidia-isaac',
+            'specs/module-04-vla',
+            'specs/module-05-humanoid-robotics',
+            'specs/module-06-capstone-project',
+            'specs/module-07-hardware-lab',
+            'specs/module-08-appendices-resources'
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Course Structure',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'specify/overview',
+            'specify/learning-objectives',
+            'specify/course-structure'
           ],
         },
       ],

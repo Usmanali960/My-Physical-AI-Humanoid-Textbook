@@ -146,7 +146,7 @@ class JointStatePublisher(Node):
         self.timer = self.create_timer(0.01, self.publish_joint_state)  # 100 Hz
         self.joint_names = ['hip_joint', 'knee_joint', 'ankle_joint']
         self.position = [0.0, 0.0, 0.0]
-        
+
     def publish_joint_state(self):
         msg = JointState()
         msg.name = self.joint_names
@@ -154,7 +154,7 @@ class JointStatePublisher(Node):
         msg.header.stamp = self.get_clock().now().to_msg()
         msg.header.frame_id = 'base_link'
         self.publisher.publish(msg)
-        
+
         # Update position for demonstration
         self.position = [math.sin(self.get_clock().now().nanoseconds * 1e-9),
                          math.cos(self.get_clock().now().nanoseconds * 1e-9),
@@ -215,12 +215,12 @@ class JointHomingServer(Node):
     def __init__(self):
         super().__init__('joint_homing_server')
         self.srv = self.create_service(Trigger, 'home_joints', self.homing_callback)
-        
+
     def homing_callback(self, request, response):
         self.get_logger().info('Homing joints initiated')
         # Simulate homing process
         time.sleep(2)
-        
+
         response.success = True
         response.message = 'All joints homed successfully'
         self.get_logger().info('Homing completed')
@@ -248,7 +248,7 @@ class HomingClient(Node):
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Service not available, waiting...')
         self.req = Trigger.Request()
-        
+
     def send_request(self):
         self.future = self.cli.call_async(self.req)
         rclpy.spin_until_future_complete(self, self.future)
@@ -275,10 +275,10 @@ A typical sensor data processing pipeline in a humanoid robot might look like:
 ```
 Camera Node (publishes /camera/image_raw)
          ↓ (image topic)
-Image Processing Node (subscribes to /camera/image_raw, 
+Image Processing Node (subscribes to /camera/image_raw,
                     processes image, publishes /object_detected)
          ↓ (object detection topic)
-Behavior Node (subscribes to /object_detected, 
+Behavior Node (subscribes to /object_detected,
             decides robot behavior)
 ```
 
@@ -309,30 +309,30 @@ from geometry_msgs.msg import Twist
 class HumanoidController(Node):
     def __init__(self):
         super().__init__('humanoid_controller')
-        
+
         # Subscriber for joint states
         self.joint_state_sub = self.create_subscription(
             JointState, 'joint_states', self.joint_state_callback, 10)
-        
+
         # Publisher for joint commands
         self.joint_cmd_pub = self.create_publisher(
             Float64MultiArray, 'joint_commands', 10)
-        
+
         # Command subscriber (e.g., from navigation)
         self.cmd_sub = self.create_subscription(
             Twist, 'cmd_vel', self.cmd_vel_callback, 10)
-        
+
         self.current_joint_states = JointState()
-        
+
     def joint_state_callback(self, msg):
         self.current_joint_states = msg
         # Process joint states, implement control logic
-        
+
     def cmd_vel_callback(self, msg):
         # Convert velocity command to joint commands
         joint_commands = Float64MultiArray()
         # Implementation would convert Twist to joint movements
-        
+
         self.joint_cmd_pub.publish(joint_commands)
 
 def main(args=None):
@@ -394,7 +394,3 @@ Understanding these communication patterns is essential for developing robust, m
    - A service to transition between different robot states (sitting, standing, walking)
 
 3. Implement a node that subscribes to IMU data and publishes a simplified balance state based on the received information.
-
----
-
-*This chapter is part of the Physical AI & Humanoid Robotics textbook. [Personalize Chapter] [Translate to Urdu]*

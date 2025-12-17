@@ -1,0 +1,37 @@
+---
+sidebar_position: 1
+title: 'Interactive AI Assistant'
+---
+
+# Interactive AI Assistant
+
+Welcome to the AI-Humanoid Robotics textbook with an integrated AI assistant powered by Chainlit. You can ask questions about the content and get answers with citations.
+
+## Using the Chainlit UI
+
+```mdx-code-block
+import ChainlitEmbed from '@site/src/components/ChainlitEmbed';
+
+<ChainlitEmbed />
+```
+
+## Features
+
+- **Semantic Search**: Ask questions about the entire textbook content
+- **Multi-section RAG**: Get answers that pull information from multiple chapters
+- **Citations**: All answers include structured citations showing source (Section > Page > Paragraph)
+- **Interactive Interface**: Clean and intuitive chat interface powered by Chainlit
+
+## Example Questions
+
+- "What are the key principles of Physical AI?"
+- "Explain the difference between kinematics and dynamics in robotics"
+- "What are the main challenges in humanoid robot locomotion?"
+
+## Running the System
+
+To run the complete system:
+
+1. Start the backend RAG API: `cd backend-rag && uvicorn main:app --reload --port 8000`
+2. Start the Chainlit UI: `cd backend-rag && chainlit run chainlit_app.py -h localhost -p 8001`
+3. The Chainlit UI will be available at `http://localhost:8001`

@@ -1,0 +1,131 @@
+{
+  "translationCacheSchema": {
+    "version": "1.0",
+    "name": "AI-Humanoid Robotics Translation Cache Configuration",
+    "description": "Configuration for caching translated content in the online book project",
+    "defaultSettings": {
+      "enabled": true,
+      "maxCacheSize": 1000,
+      "defaultExpiryMinutes": 1440,
+      "compressionEnabled": true,
+      "offlineSupport": true
+    },
+    "supportedLanguages": [
+      {
+        "code": "ur",
+        "name": "Urdu",
+        "direction": "rtl",
+        "isPrimaryTarget": true
+      },
+      {
+        "code": "en",
+        "name": "English",
+        "direction": "ltr",
+        "isPrimaryTarget": false
+      },
+      {
+        "code": "es",
+        "name": "Spanish",
+        "direction": "ltr",
+        "isPrimaryTarget": false
+      },
+      {
+        "code": "fr",
+        "name": "French",
+        "direction": "ltr",
+        "isPrimaryTarget": false
+      }
+    ],
+    "cacheStrategies": [
+      {
+        "name": "recentlyUsed",
+        "description": "Keep recently accessed translations in cache",
+        "algorithm": "LRU",
+        "priority": 1
+      },
+      {
+        "name": "frequentlyUsed",
+        "description": "Keep frequently accessed translations in cache",
+        "algorithm": "LFU",
+        "priority": 2
+      },
+      {
+        "name": "contentType",
+        "description": "Keep certain content types (e.g., glossary) permanently",
+        "algorithm": "custom",
+        "priority": 3
+      }
+    ],
+    "translationProviders": [
+      {
+        "name": "AI_TRANSLATION_SERVICE",
+        "type": "neural",
+        "supportedLanguages": ["ur", "en", "es"],
+        "qualityScore": 0.85,
+        "responseTimeMs": 1200,
+        "costPer1000Chars": 0.002
+      },
+      {
+        "name": "RULE_BASED_TRANSLATOR",
+        "type": "rule-based",
+        "supportedLanguages": ["ur", "en"],
+        "qualityScore": 0.7,
+        "responseTimeMs": 400,
+        "costPer1000Chars": 0.0005
+      }
+    ],
+    "cacheStructure": {
+      "translationUnit": {
+        "id": "string",
+        "sourceLanguage": "string",
+        "targetLanguage": "string",
+        "sourceContentId": "string",
+        "translatedContent": "any",
+        "translationMetadata": {
+          "provider": "string",
+          "qualityScore": "number",
+          "translationDate": "date",
+          "characterCount": "number"
+        },
+        "cacheMetadata": {
+          "accessCount": "number",
+          "lastAccessDate": "date",
+          "expiryDate": "date"
+        }
+      },
+      "cacheIndex": {
+        "byContentId": "map",
+        "byLanguagePair": "map",
+        "byAccessFrequency": "sorted-list",
+        "byExpiry": "priority-queue"
+      }
+    },
+    "performanceSettings": {
+      "maxCacheSizeMb": 50,
+      "targetResponseTimeMs": 200,
+      "minCompressionRatio": 0.5,
+      "prefetchEnabled": true,
+      "prefetchThreshold": 0.7
+    },
+    "offlineSupport": {
+      "enabled": true,
+      "maxOfflineCacheSizeMb": 20,
+      "syncStrategy": "lazy",
+      "fallbackStrategy": "showOriginalWithNotification"
+    },
+    "qualityAssurance": {
+      "enablePostEditing": false,
+      "qualityThreshold": 0.75,
+      "humanReviewRequired": [
+        "glossary",
+        "codeExamples",
+        "exercises"
+      ]
+    },
+    "analytics": {
+      "trackCacheHitRate": true,
+      "monitorTranslationQuality": true,
+      "collectLanguagePreferences": true
+    }
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "subagentConfiguration": {
+    "version": "1.0",
+    "name": "Physical AI & Humanoid Robotics Subagent System",
+    "description": "Configuration for Claude Code Subagents in the AI-Humanoid Robotics educational platform",
+    "defaultSettings": {
+      "responseTimeout": 30000,
+      "maxRetries": 3,
+      "cacheEnabled": true,
+      "cacheExpiryMinutes": 60,
+      "maxResponseTokens": 2000
+    },
+    "availableSubagents": [
+      {
+        "id": "concept-explainer",
+        "name": "Concept Explainer",
+        "description": "Explains complex robotics and AI concepts in an educational manner",
+        "capabilities": [
+          "explain-terminology",
+          "provide-examples",
+          "draw-analogies",
+          "compare-concepts"
+        ],
+        "targetAudience": ["beginner", "intermediate", "advanced"],
+        "domains": ["physical-ai", "humanoid-robotics", "ros", "machine-learning"]
+      },
+      {
+        "id": "code-generator",
+        "name": "Code Generator",
+        "description": "Generates implementation code for robotics algorithms and systems",
+        "capabilities": [
+          "generate-ros-nodes",
+          "implement-control-algorithms",
+          "create-simulation-code",
+          "debug-robotics-code"
+        ],
+        "targetAudience": ["intermediate", "advanced"],
+        "domains": ["programming", "implementation", "debugging"]
+      },
+      {
+        "id": "problem-analyzer",
+        "name": "Problem Analyzer",
+        "description": "Analyzes robotics problems and suggests solution approaches",
+        "capabilities": [
+          "problem-decomposition",
+          "algorithm-selection",
+          "architecture-design",
+          "performance-optimization"
+        ],
+        "targetAudience": ["intermediate", "advanced"],
+        "domains": ["problem-solving", "design", "optimization"]
+      },
+      {
+        "id": "research-finder",
+        "name": "Research Finder",
+        "description": "Finds relevant academic papers and research in robotics and AI",
+        "capabilities": [
+          "literature-search",
+          "paper-summarization",
+          "citation-generation",
+          "trend-analysis"
+        ],
+        "targetAudience": ["researcher", "advanced"],
+        "domains": ["research", "academia", "literature"]
+      }
+    ],
+    "integrationPoints": [
+      {
+        "location": "chapter-introduction",
+        "allowedSubagents": ["concept-explainer"],
+        "maxInstances": 1
+      },
+      {
+        "location": "code-example",
+        "allowedSubagents": ["code-generator"],
+        "maxInstances": 2
+      },
+      {
+        "location": "exercise-section",
+        "allowedSubagents": ["problem-analyzer"],
+        "maxInstances": 1
+      },
+      {
+        "location": "further-reading",
+        "allowedSubagents": ["research-finder"],
+        "maxInstances": 1
+      }
+    ],
+    "personalizationSettings": {
+      "enabled": true,
+      "userProfileBased": true,
+      "adaptationRules": [
+        {
+          "condition": "user.level === 'beginner'",
+          "adjustment": "simplify-explanations"
+        },
+        {
+          "condition": "user.level === 'advanced'",
+          "adjustment": "add-depth-and-complexity"
+        },
+        {
+          "condition": "user.primaryLanguage === 'urdu'",
+          "adjustment": "provide-urdu-explanation-bullets"
+        }
+      ]
+    },
+    "security": {
+      "apiRateLimiting": {
+        "requestsPerMinute": 60,
+        "burstLimit": 10
+      },
+      "userQuotas": {
+        "freeTier": {
+          "dailyRequests": 50,
+          "responseTokensPerDay": 10000
+        },
+        "premiumTier": {
+          "dailyRequests": 500,
+          "responseTokensPerDay": 100000
+        }
+      }
+    },
+    "monitoring": {
+      "metricsCollection": true,
+      "responseLogging": {
+        "enabled": true,
+        "retentionDays": 30
+      },
+      "performanceMonitoring": {
+        "responseTimeThreshold": 5000,
+        "errorRateAlertThreshold": 0.05
+      }
+    }
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "personalizationConfiguration": {
+    "version": "1.0",
+    "name": "AI-Humanoid Robotics Content Personalization System",
+    "description": "Configuration for personalizing book content based on user background and preferences",
+    "defaultSettings": {
+      "enabled": true,
+      "adaptiveDifficulty": true,
+      "contextualExamples": true,
+      "contentDepthAdjustment": true,
+      "languageAdaptation": true
+    },
+    "userProfileFields": {
+      "required": [
+        "softwareExperience",
+        "hardwareExperience",
+        "primaryProgrammingLanguage"
+      ],
+      "optional": [
+        "softwareDomain",
+        "hardwareDomain",
+        "yearsOfExperience",
+        "educationalBackground",
+        "primaryGoal"
+      ]
+    },
+    "personalizationRules": [
+      {
+        "condition": "user.softwareExperience === 'beginner'",
+        "actions": [
+          {
+            "type": "addBeginnerExplanations",
+            "weight": 0.9
+          },
+          {
+            "type": "simplifyTechnicalContent",
+            "weight": 0.8
+          },
+          {
+            "type": "addMoreExamples",
+            "weight": 0.7
+          }
+        ]
+      },
+      {
+        "condition": "user.softwareExperience === 'advanced'",
+        "actions": [
+          {
+            "type": "addAdvancedInsights",
+            "weight": 0.9
+          },
+          {
+            "type": "includeImplementationDetails",
+            "weight": 0.8
+          },
+          {
+            "type": "addComplexExamples",
+            "weight": 0.7
+          }
+        ]
+      },
+      {
+        "condition": "user.hardwareExperience === 'beginner'",
+        "actions": [
+          {
+            "type": "addHardwareBasics",
+            "weight": 0.9
+          },
+          {
+            "type": "simplifyHardwareConcepts",
+            "weight": 0.8
+          }
+        ]
+      },
+      {
+        "condition": "user.primaryProgrammingLanguage !== 'Python'",
+        "actions": [
+          {
+            "type": "translateCodeExamples",
+            "targetLanguage": "user.primaryProgrammingLanguage",
+            "weight": 0.8
+          }
+        ]
+      },
+      {
+        "condition": "user.primaryGoal === 'learn robotics'",
+        "actions": [
+          {
+            "type": "addRoboticsFocus",
+            "weight": 0.9
+          },
+          {
+            "type": "emphasizeHardwareSoftwareIntegration",
+            "weight": 0.7
+          }
+        ]
+      },
+      {
+        "condition": "user.primaryGoal === 'research'",
+        "actions": [
+          {
+            "type": "addResearchContext",
+            "weight": 0.9
+          },
+          {
+            "type": "includeAcademicReferences",
+            "weight": 0.8
+          }
+        ]
+      }
+    ],
+    "contentAdaptationStrategies": {
+      "difficultyAdjustment": {
+        "beginner": {
+          "simplify": true,
+          "addExplanations": true,
+          "reduceAbstraction": true
+        },
+        "intermediate": {
+          "balanceDetailAndOverview": true,
+          "includeExamples": true
+        },
+        "advanced": {
+          "addComplexity": true,
+          "includeEdgeCases": true,
+          "addPerformanceNotes": true
+        }
+      },
+      "exampleCustomization": {
+        "byDomain": {
+          "webDevelopment": {
+            "relateTo": "web-based robotics interfaces",
+            "examples": ["remote robot control via web app", "robot dashboard"]
+          },
+          "mobileDevelopment": {
+            "relateTo": "mobile robotics apps",
+            "examples": ["robot control mobile app", "mobile robot visualization"]
+          },
+          "aiMl": {
+            "relateTo": "machine learning in robotics",
+            "examples": ["robot learning algorithms", "perception systems"]
+          },
+          "embeddedSystems": {
+            "relateTo": "embedded robot systems",
+            "examples": ["microcontroller-based robots", "sensor integration"]
+          }
+        }
+      }
+    },
+    "adaptationParameters": {
+      "maxExplanationAdditionPercent": 0.5,
+      "minContentRatio": 0.3,
+      "complexityStepSize": 0.2,
+      "exampleDensity": {
+        "beginner": 2,
+        "intermediate": 1,
+        "advanced": 0.5
+      }
+    },
+    "performanceSettings": {
+      "caching": {
+        "enabled": true,
+        "ttlMinutes": 60,
+        "maxCacheSize": 100
+      },
+      "adaptationTimeoutMs": 5000
+    },
+    "analytics": {
+      "trackEffectiveness": true,
+      "collectFeedback": true,
+      "measureEngagement": true
+    }
+  }
+}

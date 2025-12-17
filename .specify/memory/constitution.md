@@ -76,4 +76,21 @@ Must include:
 ## Governance
 The constitution governs structure, rules, workflow, and principles for generating the entire book using Spec-Kit Plus + Qwen Coder + Docusaurus (latest version using MCP server: context7). All implementations must follow the Spec-Driven process (Specs → Tasks → Implementation → History). All content must be generated for Docusaurus delivery and maintain the required folder structure.
 
-**Version**: 1.0.0 | **Ratified**: 2025-12-07 | **Last Amended**: 2025-12-07
+**Version**: 1.0.0 | **Ratified**: 2025-12-07 | **Last Amended**: 2025-12-09
+
+## Extended Features & Bonus Criteria (2026)
+
+3. Participants will receive points out of 100 for the base functionality already defined in the constitution. This includes all core requirements previously listed.
+
+4. Participants can earn up to 50 extra bonus points by creating and using **reusable intelligence** via:
+   - Claude Code Subagents
+   - Agent Skills
+   These must be integrated inside the online book project.
+
+5. Participants can receive up to 50 extra bonus points if they implement **Signup and Signin** using **Better Auth (https://www.better-auth.com/)**.
+   At signup, the system must ask questions about the user's software and hardware background.
+   This data must later be used to personalize content inside the book.
+
+6. Participants can receive up to 50 extra bonus points if logged-in users can **personalize the content of each chapter** by pressing a button at the start of the chapter.
+
+7. Participants can receive up to 50 extra bonus points if logged-in users can **translate any chapter content into Urdu** by pressing a button at the start of the chapter.

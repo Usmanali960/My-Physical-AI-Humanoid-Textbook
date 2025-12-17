@@ -3,10 +3,9 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
-
 const config: Config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'AI-Humanoid Robotics',
+  tagline: 'Comprehensive guide to AI-Humanoid Robotics',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -32,7 +31,7 @@ const config: Config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en', 'ur'],
   },
 
   presets: [
@@ -68,6 +67,14 @@ const config: Config = {
     ],
   ],
 
+  plugins: [
+    // './docusaurus-plugin-chat-widget.js', // Temporarily disabled due to module resolution issue
+  ],
+
+  themes: [
+    // Add the custom navbar components
+  ],
+
   themeConfig: {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
@@ -75,9 +82,9 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'My Site',
+      title: 'AI-Humanoid Robotics',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'AI-Humanoid Robotics Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -88,6 +95,32 @@ const config: Config = {
           label: 'Tutorial',
         },
         {to: '/blog', label: 'Blog', position: 'left'},
+        {to: '/chat', label: 'Chatbot', position: 'left'},
+        {
+          type: 'html',
+          position: 'right',
+          value: '<div id="navbar-language-toggle"></div>',
+        },
+        {
+          type: 'html',
+          position: 'right',
+          value: '<div id="navbar-personalize"></div>',
+        },
+        {
+          type: 'dropdown',
+          position: 'right',
+          label: 'Account',
+          items: [
+            {
+              label: 'Profile',
+              to: '/profile',
+            },
+            {
+              label: 'Login',
+              to: '/login',
+            },
+          ],
+        },
         {
           href: 'https://github.com/facebook/docusaurus',
           label: 'GitHub',
@@ -133,18 +166,23 @@ const config: Config = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/Usmanali960/My-Physical-Ai-Humanoid-Textbook',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} AI-Humanoid Robotics Project. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
   } satisfies Preset.ThemeConfig,
+
+  // Enable the custom root wrapper
+  clientModules: [
+    './src/Root.tsx',
+  ],
 };
 
 export default config;

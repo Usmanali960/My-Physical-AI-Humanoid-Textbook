@@ -1,22 +1,17 @@
+
 # Dependencies
 node_modules/
-jspm_packages/
+.pnp/
+.pnp.js
 
-# Docusaurus
-.build/
-.dist/
-.docusaurus/
-.temp/
+# Testing
+coverage/
+.nyc_output/
 
 # Production builds
-build/
-out/
-
-# Logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+/build/
+/dist/
+/out/
 
 # Environment variables
 .env*
@@ -27,43 +22,94 @@ yarn-error.log*
 .idea/
 *.swp
 *.swo
-*~
-
-# OS
 .DS_Store
 Thumbs.db
 
-# Coverage
-coverage/
-*.lcov
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Temporary files
+# Docusaurus
+.docusaurus/
+.checkpoint/
+
+# System files
 *.tmp
 *.bak
-*.orig
-*.rej
+*~
 
-# Compiled files
-*.o
-*.pyc
-__pycache__/
-*.class
-*.so
+# OS generated files
+ehthumbs.db
+Icon?
+._*
 
-# Package manager
+# Build outputs
+.next/
+.nuxt/
+public/
+server.js
+server/
+
+# Lock files (can be regenerated with npm install/yarn install)
 package-lock.json
 yarn.lock
-pnpm-lock.yaml
-
-# Secrets
-secrets/
-*.key
-*.pem
-*.crt
-*.cert
 
 # Python
-*.pyc
 __pycache__/
-.pytest_cache/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-selfcheck.json
+.eggs/
+*.egg-info/
+.installed.cfg
+*.manifest
+*.spec
 .coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git/modules/
+.pytest_cache/
+.hypothesis/
+
+# Database
+*.db
+*.db-journal
+
+# Local configuration
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.com.apple.timemachine.supported
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+

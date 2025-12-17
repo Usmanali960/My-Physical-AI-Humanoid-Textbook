@@ -3,9 +3,7 @@ import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import Heading from '@theme/Heading';
-
 import styles from './index.module.css';
 
 function HomepageHeader() {
@@ -31,13 +29,19 @@ function HomepageHeader() {
 
 export default function Home(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
+
   return (
     <Layout
       title={`Hello from ${siteConfig.title}`}
       description="Description will go into a meta tag in <head />">
       <HomepageHeader />
       <main>
-        <HomepageFeatures />
+        <section style={{ padding: '40px 20px' }}>
+          <div className="container">
+            <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Welcome to the Humanoid Robotics Book</h2>
+            <p>Explore the fascinating world of humanoid robotics and AI systems.</p>
+          </div>
+        </section>
       </main>
     </Layout>
   );
